@@ -76,7 +76,7 @@ public class ParserApp {
                 filesPath = Path.of(String.valueOf(directory)).toAbsolutePath();
                 if(isFirstRun)
                 System.out.println("directory created! your files will be saved here --> " + filesPath);
-                runApplication(false);
+
 
             } else
                 filesPath = path.toAbsolutePath();
@@ -411,7 +411,7 @@ public class ParserApp {
             String directoryName = filesPath.toString();
             Files.write(Paths.get(directoryName, fileTitle + System.currentTimeMillis() + ".txt"), Collections.singleton(content),
                     StandardCharsets.UTF_8);
-            runApplication(false);
+
             return true;
         }catch (IOException e){
             System.out.println(GuiStrings.errorString("Couldn't create file"));
