@@ -1,19 +1,17 @@
 package com.mattg;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
-import org.json.JSONString;
-import org.json.JSONStringer;
 import org.json.XML;
-import org.json.simple.parser.JSONParser;
-import org.w3c.dom.ls.LSOutput;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -33,11 +31,14 @@ public class ParserApp {
     private boolean copyToClipBoard = true;
     private Path filesPath;
     private int count = 0;
+    private boolean isFirstRun = true;
 
-    public void runApplication(){
-        checkDirectory();
-
-        System.out.println(GuiStrings.mainTitle);
+    public void runApplication(@Nullable boolean isFirst){
+            isFirstRun = isFirst;
+            checkDirectory();
+            if(isFirst) {
+                System.out.println(GuiStrings.mainTitle);
+            }
         in = new Scanner(System.in);
 
         while(true) {
@@ -50,10 +51,6 @@ public class ParserApp {
                     resetBooleans();
                 } else if (isJson) {
                     //input is filepath to json document
-                    if(!command.startsWith("'")) {
-                       command = "'" + command.replaceAll("\"","'") + "'";
-                    } else
-                        command.replaceAll("\"","'");
                     readJSONtoXML(command.trim());
                     resetBooleans();
                 }
@@ -72,16 +69,20 @@ public class ParserApp {
      * Checks if the directory for file output exists, if it doesn't it will be created
      */
     private void checkDirectory() {
-        System.out.println("check directory called");
         try {
-            Path path = Paths.get("conversions/");
+            Path path = Paths.get("output"+ File.separator + "myconversions" + File.separator);
             if(!Files.exists(path)) {
                 Path directory = Files.createDirectories(path);
+                filesPath = Path.of(String.valueOf(directory)).toAbsolutePath();
+                if(isFirstRun)
                 System.out.println("directory created! your files will be saved here --> " + filesPath);
-                filesPath = Path.of(directory.toString());
-                System.out.println(filesPath);
+                runApplication(false);
+
             } else
                 filesPath = path.toAbsolutePath();
+                if(isFirstRun)
+                System.out.println("Your conversions will be created here: " + filesPath);
+
         } catch (IOException e){
             System.out.println(GuiStrings.errorString("Error Creating Directory: "));
             System.out.println(GuiStrings.errorString( e.getLocalizedMessage()));
@@ -350,15 +351,14 @@ public class ParserApp {
         } else {
             String results = "";
             try {
-                JSONParser parser = new JSONParser();
-                JSONObject json = (JSONObject) parser.parse(command.trim());
+                JSONObject json = new JSONObject(command.trim());
                 String jsonString = json.toString();
                 results = xmlStringFromJson(jsonString, "root");
                 if(createFile) createFileFromResult(results);
                 if(showResult) System.out.println("Your JSON converted to : \n" +results);
                 if(copyToClipBoard) copyToClipBoard(results);
             } catch (Exception e){
-                System.out.println(GuiStrings.errorString("Error parsing JSON"));
+                System.out.println(GuiStrings.errorString("Error parsing JSON" + e.getMessage()));
                 in = new Scanner(System.in);
             }
 
@@ -384,10 +384,17 @@ public class ParserApp {
      * @return String XML string value converted from JSON string input
      */
     private  String xmlStringFromJson(String jsonString, String rootName){
-        JSONObject object = new JSONObject(jsonString);
+        String xmlReturnString = "";
+        try{
+            JSONObject jsonObject = new JSONObject(jsonString);
+            xmlReturnString = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<"+rootName+">" + XML.toString(jsonObject) + "</"+rootName+">";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("***GOT XML FROM JSON***");
         //create and return standard formatted xml string that can be written to file, or printed to console
-        return "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<"+rootName+">" + XML.toString(object) + "</"+rootName+">";
+        return xmlReturnString;
     }
 
     /**
@@ -400,10 +407,11 @@ public class ParserApp {
         BufferedWriter writer;
         FileWriter fileWriter;
         try{
-            String directoryName = filesPath.toAbsolutePath().toString();
-            writer = new BufferedWriter(new FileWriter( new File(directoryName, fileTitle + System.currentTimeMillis() + ".txt"), true));
-            writer.append(content);
-            writer.close();
+            System.out.println("filespath = " + filesPath);
+            String directoryName = filesPath.toString();
+            Files.write(Paths.get(directoryName, fileTitle + System.currentTimeMillis() + ".txt"), Collections.singleton(content),
+                    StandardCharsets.UTF_8);
+            runApplication(false);
             return true;
         }catch (IOException e){
             System.out.println(GuiStrings.errorString("Couldn't create file"));
