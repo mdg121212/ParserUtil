@@ -5,10 +5,7 @@ package com.mattg;
  * create them when we need to use them
  */
 public class GuiStrings {
-
-    public static String newLine = "\n";
-    private static String error = "**(ERROR)**";
-    public static String filler =    "\n:::==:::==:::==:::==:::==:::==:::==:::==:::==:::==:::==:::\n";
+    public static String filler =    ":::==:::==:::==:::==:::==:::==:::==:::==:::==:::==:::==:::\n";
     public static String exitTitle = filler +
                                      "\n:::==:::==:::==:::==:::==   Bye  ==:::==:::==:::==:::==:::\n" +
                                      filler;
@@ -26,6 +23,8 @@ public class GuiStrings {
                                        "::: toggles whether or not a new file with the result  :::\n" +
                                        "::: will be created, 'showresult' toggles printing the :::\n" +
                                        "::: result to the console, 'exit' closes the program.  :::\n" +
+                                       "::: Results by default are copied to clipboard, 'copy' :::\n" +
+                                       "::: toggles this feature. Enjoy!                       :::\n" +
                                                   filler;
 
     /**
@@ -38,14 +37,14 @@ public class GuiStrings {
         return "(" + number + ") " + text;
     }
 
-
     /**
      * Error message
      * @param text error description
      * @return A formatted error message to print to console
      */
     public static String errorString(String text){
-        return error + newLine + "* * " + text + newLine + error;
+        String error = "**(ERROR)**";
+        return error + text + error;
     }
 
 
