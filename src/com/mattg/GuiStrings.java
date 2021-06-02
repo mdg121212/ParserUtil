@@ -19,13 +19,24 @@ public class GuiStrings {
                                        "::: that file and convert it from either JSON to XML or:::\n" +
                                        "::: vice versa. Enter 'jsonstring' or 'xmlstring' to   :::\n" +
                                        "::: convert a string value from JSON to XML or vice    :::\n" +
-                                       "::: versa.  Enter 'options' to see a menu, 'createfile':::\n" +
-                                       "::: toggles whether or not a new file with the result  :::\n" +
-                                       "::: will be created, 'showresult' toggles printing the :::\n" +
-                                       "::: result to the console, 'exit' closes the program.  :::\n" +
-                                       "::: Results by default are copied to clipboard, 'copy' :::\n" +
-                                       "::: toggles this feature. Enjoy!                       :::\n" +
+                                       "::: versa.  Entering 'createfile' toggles whether or   :::\n" +
+                                       "::: not a new file with the result will be created,    :::\n" +
+                                       "::: 'showresult' toggles printing the result to the    :::\n" +
+                                       "::: console, 'exit' closes the program, and 'commands' :::\n" +
+                                       "::: lists the available commands. Results by default   :::\n" +
+                                       "::: are copied to clipboard, entering 'copy' toggles   :::\n" +
+                                       "::: feature. Enter 'test' for XML to JSON address book :::\n" +
+                                       "::: conversion example.   Enjoy!                       :::\n" +
                                                   filler;
+    public static String commands = filler + "'json file' - next input should be a file path to JSON document.\n" +
+            "'xmlfile' - next input should be a file path to XML document.\n" +
+            "'jsonstring' - next input should be JSON.\n" +
+            "'xmlstring' - next input should be XML.\n" +
+            "'createfile' - toggles file creation from results, on by default.\n" +
+            "'showresult' - toggles results being shown in console, on by default.\n" +
+            "'copy' - toggles results being copied to clipboard, on by default.\n" +
+            "'test' - converts provided example xml to json.\n" +
+            "'exit' - exits the program.\n" + filler;
 
     /**
      * For creating a menu line

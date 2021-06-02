@@ -1,6 +1,5 @@
 package com.mattg;
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.json.XML;
 import java.awt.*;
@@ -33,7 +32,7 @@ public class ParserApp {
     private int count = 0;
     private boolean isFirstRun = true;
 
-    public void runApplication(@Nullable boolean isFirst){
+    public void runApplication(boolean isFirst){
             isFirstRun = isFirst;
             checkDirectory();
             if(isFirst) {
@@ -51,16 +50,12 @@ public class ParserApp {
                     resetBooleans();
                 } else if (isJson) {
                     //input is filepath to json document
-                    readJSONtoXML(command.trim());
+                    readJSONtoXML(command);
                     resetBooleans();
                 }
                 parseCommand(command);
             }
 
-            if (in.hasNextInt()) {
-                numberCommand = in.nextInt();
-                parseNumberCommand(numberCommand);
-            }
         }
 
     }
@@ -94,57 +89,54 @@ public class ParserApp {
     private void resetBooleans(){
         isJson = false;
         isXml = false;
+        isFilePath = false;
     }
 
-    /**
-     * Handle integer inputs when user is choosing from options menu
-     * @param numberCommand number from the console
-     */
-    private void parseNumberCommand(int numberCommand) {
-        switch (numberCommand) {
-            case 1 -> {
-                System.out.println("Please enter the file path to your XML document for JSON conversion.");
-                isXml = true;
-                isJson = false;
-                isFilePath = true;
-                break;
-            }
-            case 2 -> {
-                System.out.println("Please enter your XML to convert to JSON.");
-                isXml = true;
-                isJson = false;
-                isFilePath = false;
-                break;
-            }
-            case 3 -> {
-                System.out.println("Please enter the filepath of your JSON document for XML conversion.");
-                isXml = false;
-                isJson = true;
-                isFilePath = true;
-                break;
-            }
-            case 4 -> {
-                System.out.println("Please enter a JSON string to convert to XML");
-                isXml = false;
-                isJson = true;
-                isFilePath = false;
-                break;
-            }
-            case 5 -> {
-                closeProgram();
-                break;
-            }
-            default -> {
-                count++;
-                if (count == 3) {
-                    System.out.println(GuiStrings.mainTitle);
-                    count = 0;
-                } else
-                    System.out.println("Not a valid option...");
-                break;
-            }
-        }
-    }
+//    /**
+//     * Handle integer inputs when user is choosing from options menu
+//     * @param numberCommand number from the console
+//     */
+//    private void parseNumberCommand(int numberCommand) {
+//        switch (numberCommand) {
+//            case 1 -> {
+//                count = 0;
+//                isXml = true;
+//                isJson = false;
+//                isFilePath = true;
+//                parseCommand("xmlfile");
+//            }
+//            case 2 -> {
+//                count = 0;
+//                isXml = true;
+//                isJson = false;
+//                isFilePath = false;
+//                parseCommand("xmlstring");
+//            }
+//            case 3 -> {
+//                count = 0;
+//                isXml = false;
+//                isJson = true;
+//                isFilePath = true;
+//                parseCommand("jsonfile");
+//            }
+//            case 4 -> {
+//                count = 0;
+////                isXml = false;
+////                isJson = true;
+////                isFilePath = false;
+//                parseCommand("jsonstring");
+//            }
+//            case 5 -> closeProgram();
+//            default -> {
+//                count++;
+//                if (count == 3) {
+//                    System.out.println(GuiStrings.commands);
+//                    count = 0;
+//                } else
+//                    System.out.println("Not a valid option...");
+//            }
+//        }
+//    }
 
     /**
      * Takes the console input and handles it based on a switch statement
@@ -154,12 +146,23 @@ public class ParserApp {
         String formatted = command.toLowerCase(Locale.ROOT);
         switch (formatted) {
             case "options" -> {
-                showMenu("options");
-                break;
+                showMenu();
+                count = 0;
+            }
+            case "commands" -> {
+                System.out.println(GuiStrings.commands);
+                count = 0;
+            }
+            case "test" -> {
+                isFilePath = true;
+                readXMLToJSON("testxml.xml");
+                count = 0;
+
             }
             case "exit" -> {
                 closeProgram();
-                break;
+                count = 0;
+
             }
             case "xmlfile" -> {
                 System.out.println("**Enter the file path of XML to be converted**");
@@ -167,7 +170,8 @@ public class ParserApp {
                 isFilePath = true;
                 isJson = false;
                 isStringToConvert = false;
-                break;
+                count = 0;
+
             }
             case "jsonfile" -> {
                 System.out.println("**Enter the file path of JSON to be converted**");
@@ -175,7 +179,8 @@ public class ParserApp {
                 isXml = false;
                 isStringToConvert = false;
                 isFilePath = true;
-                break;
+                count = 0;
+
             }
             case "jsonstring" -> {
                 System.out.println("**Enter the JSON to be converted**");
@@ -183,11 +188,11 @@ public class ParserApp {
                 isXml = false;
                 isStringToConvert = true;
                 isFilePath = false;
-                break;
+                count = 0;
             }
             case "copy" -> {
                 copyToClipBoard = !copyToClipBoard;
-                break;
+                count = 0;
             }
             case "xmlstring" -> {
                 System.out.println("**Enter XML to be converted**");
@@ -195,25 +200,25 @@ public class ParserApp {
                 isJson = false;
                 isFilePath = false;
                 isStringToConvert = true;
-                break;
+                count = 0;
             }
             case "showresult" -> {
+                count = 0;
                 if (!showResult) {
                     System.out.println("Results of conversions will now be printed to the console");
                     showResult = true;
                 } else
                     System.out.println("Results of conversions will not be printed to the console");
                 showResult = false;
-                break;
             }
             case "createfile" -> {
+                count = 0;
                 if (!createFile) {
                     System.out.println("Now files will be generated for your conversions.  They will exist here --> " + filesPath);
                     createFile = true;
                 } else
                     System.out.println("File creation turned off");
                 createFile = false;
-                break;
             }
             default -> {
                 count++;
@@ -222,7 +227,6 @@ public class ParserApp {
                     count = 0;
                 } else
                     System.out.println("...");
-                break;
             }
         }
 
@@ -238,15 +242,15 @@ public class ParserApp {
     /**
      * Show a command line menu describing program functionality
      */
-    private void showMenu(String menuType) {
-        if(menuType.equalsIgnoreCase("options")){
+    private void showMenu() {
+
             System.out.println(GuiStrings.optionsTitle);
             System.out.println(GuiStrings.menuLine(1, "Convert XML document to JSON by filepath."));
             System.out.println(GuiStrings.menuLine(2, "Input XML string and create JSON."));
             System.out.println(GuiStrings.menuLine(3, "Convert JSON document to XML by filepath."));
             System.out.println(GuiStrings.menuLine(4, "Input JSON string and create XML."));
             System.out.println(GuiStrings.menuLine(5, "Exit program."));
-        }
+
 
     }
 
@@ -272,9 +276,8 @@ public class ParserApp {
     /**
      * Either reads an XML file and converts it to JSON, or reads an XML string and converts to JSON
      * @param filePathOrString Either a string, or a filepath (options menu/input can determine this)
-     * @return String JSON converted from either a string or a file
      */
-    private String readXMLToJSON(String filePathOrString) {
+    private void readXMLToJSON(String filePathOrString) {
         if(isFilePath){
             try {
                 reader = new FileReader(filePathOrString);
@@ -293,16 +296,13 @@ public class ParserApp {
                 if(createFile) {createFileFromResult(results);}
                 if(showResult) {System.out.println("Your xml converted to : \n" + results);}
                 if(copyToClipBoard) copyToClipBoard(results);
-                return results;
             } catch (FileNotFoundException e) {
                 System.out.println("You entered an invalid file path, please try again");
                 in = new Scanner(System.in);
-                return "";
             } catch (IOException e) {
                 System.out.print(GuiStrings.errorString(e.getLocalizedMessage()));
                 System.out.print(GuiStrings.errorString(String.valueOf(e.getCause())));
                 in = new Scanner(System.in);
-                return "";
             }
         } else {
             System.out.println("hitting else block");
@@ -310,16 +310,14 @@ public class ParserApp {
             if(createFile) createFileFromResult(results);
             if(showResult) System.out.println("Your xml converted to : \n" + results);
             if(copyToClipBoard) copyToClipBoard(results);
-            return results;
         }
 
     }
     /**
      * Creates a string from JSON input converted to XML
      * @param filePathOrString Either a file path to JSON file, or JSON string
-     * @return String XML converted from JSON input
      */
-    private  String readJSONtoXML(String filePathOrString) {
+    private void readJSONtoXML(String filePathOrString) {
         if(isFilePath){
             try {
                 reader = new FileReader(filePathOrString);
@@ -333,36 +331,32 @@ public class ParserApp {
                 }
                 bufferedReader.close();
                 System.out.println("File read, creating xml....");
-                String results = xmlStringFromJson(textBuilder.toString(), "root");
+                String results = xmlStringFromJson(textBuilder.toString());
                 if(createFile) createFileFromResult(results);
                 if(showResult) System.out.println("Your JSON converted to : \n" +results);
                 if(copyToClipBoard) copyToClipBoard(results);
-                return results;
             } catch (FileNotFoundException e) {
                 System.out.println("You entered an invalid file path, please try again");
                 in = new Scanner(System.in);
-                return "";
             } catch (IOException e) {
                 System.out.print(GuiStrings.errorString(e.getLocalizedMessage()));
                 System.out.print(GuiStrings.errorString(String.valueOf(e.getCause())));
                 in = new Scanner(System.in);
-                return "";
             }
         } else {
-            String results = "";
+            String results;
             try {
                 JSONObject json = new JSONObject(command.trim());
                 String jsonString = json.toString();
-                results = xmlStringFromJson(jsonString, "root");
+                results = xmlStringFromJson(jsonString);
                 if(createFile) createFileFromResult(results);
                 if(showResult) System.out.println("Your JSON converted to : \n" +results);
                 if(copyToClipBoard) copyToClipBoard(results);
             } catch (Exception e){
-                System.out.println(GuiStrings.errorString("Error parsing JSON" + e.getMessage()));
+                System.out.println(GuiStrings.errorString("Error parsing JSON " + e.getMessage()));
                 in = new Scanner(System.in);
             }
 
-            return results;
         }
 
     }
@@ -380,18 +374,16 @@ public class ParserApp {
     /**
      * Creates and returns an XML string from the JSON input
      * @param jsonString JSON to convert
-     * @param rootName name of the root element in the returned XML
      * @return String XML string value converted from JSON string input
      */
-    private  String xmlStringFromJson(String jsonString, String rootName){
+    private  String xmlStringFromJson(String jsonString){
         String xmlReturnString = "";
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
-            xmlReturnString = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>\n<"+rootName+">" + XML.toString(jsonObject) + "</"+rootName+">";
+            xmlReturnString = "<?xml version=\"1.0\" encoding=\"ISO-8859-15\"?>" + XML.toString(jsonObject);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         System.out.println("***GOT XML FROM JSON***");
         //create and return standard formatted xml string that can be written to file, or printed to console
         return xmlReturnString;
@@ -400,25 +392,20 @@ public class ParserApp {
     /**
      * Writes the result of a conversion to a file in the directory
      * @param content contents of the file
-     * @return whether or not the operation succeeded
      */
-    public boolean createFileFromResult(String content){
+    public void createFileFromResult(String content){
         String fileTitle = isXml ? "XMLconverted" : "JSONconverted";
-        BufferedWriter writer;
-        FileWriter fileWriter;
         try{
             System.out.println("filespath = " + filesPath);
             String directoryName = filesPath.toString();
             Files.write(Paths.get(directoryName, fileTitle + System.currentTimeMillis() + ".txt"), Collections.singleton(content),
                     StandardCharsets.UTF_8);
 
-            return true;
         }catch (IOException e){
             System.out.println(GuiStrings.errorString("Couldn't create file"));
             System.out.println(GuiStrings.errorString(e.getLocalizedMessage()));
             System.out.println(GuiStrings.errorString(String.valueOf(e.getCause())));
             in = new Scanner(System.in);
-            return false;
         }
     }
 }
