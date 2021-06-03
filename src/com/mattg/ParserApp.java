@@ -92,52 +92,6 @@ public class ParserApp {
         isFilePath = false;
     }
 
-//    /**
-//     * Handle integer inputs when user is choosing from options menu
-//     * @param numberCommand number from the console
-//     */
-//    private void parseNumberCommand(int numberCommand) {
-//        switch (numberCommand) {
-//            case 1 -> {
-//                count = 0;
-//                isXml = true;
-//                isJson = false;
-//                isFilePath = true;
-//                parseCommand("xmlfile");
-//            }
-//            case 2 -> {
-//                count = 0;
-//                isXml = true;
-//                isJson = false;
-//                isFilePath = false;
-//                parseCommand("xmlstring");
-//            }
-//            case 3 -> {
-//                count = 0;
-//                isXml = false;
-//                isJson = true;
-//                isFilePath = true;
-//                parseCommand("jsonfile");
-//            }
-//            case 4 -> {
-//                count = 0;
-////                isXml = false;
-////                isJson = true;
-////                isFilePath = false;
-//                parseCommand("jsonstring");
-//            }
-//            case 5 -> closeProgram();
-//            default -> {
-//                count++;
-//                if (count == 3) {
-//                    System.out.println(GuiStrings.commands);
-//                    count = 0;
-//                } else
-//                    System.out.println("Not a valid option...");
-//            }
-//        }
-//    }
-
     /**
      * Takes the console input and handles it based on a switch statement
      * @param command user input to be handled
@@ -145,10 +99,6 @@ public class ParserApp {
     private void parseCommand(String command) {
         String formatted = command.toLowerCase(Locale.ROOT);
         switch (formatted) {
-            case "options" -> {
-                showMenu();
-                count = 0;
-            }
             case "commands" -> {
                 System.out.println(GuiStrings.commands);
                 count = 0;
@@ -237,21 +187,6 @@ public class ParserApp {
     private void closeProgram() {
         System.out.println(GuiStrings.exitTitle);
         System.exit(1);
-    }
-
-    /**
-     * Show a command line menu describing program functionality
-     */
-    private void showMenu() {
-
-            System.out.println(GuiStrings.optionsTitle);
-            System.out.println(GuiStrings.menuLine(1, "Convert XML document to JSON by filepath."));
-            System.out.println(GuiStrings.menuLine(2, "Input XML string and create JSON."));
-            System.out.println(GuiStrings.menuLine(3, "Convert JSON document to XML by filepath."));
-            System.out.println(GuiStrings.menuLine(4, "Input JSON string and create XML."));
-            System.out.println(GuiStrings.menuLine(5, "Exit program."));
-
-
     }
 
     /**
