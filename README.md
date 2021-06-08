@@ -1,5 +1,6 @@
 # ParserUtil
-A Java command line utility to parse XML to JSON, or vice versa. Options for parsing: (options include new file creation and / or console output of conversion results)
+A Java command line utility to parse XML to JSON, or vice versa. Options for parsing: (options include new file creation and / or console output of conversion results).
+By default results are copied to clipboard and a .txt file is created.  The files will reside in the projects directory /output/myconversions.
 
     Input XML or JSON text directly
     Enter a filepath to an XML or JSON file
@@ -15,3 +16,9 @@ The basic commands that can be run once the program is running:
     7.xmlfile - progrom will fetch file at entered path and convert to json
     8.jsonstring - program will convert entered json to xml
     9.xmlstring - program will convert entered xml to json
+    
+To run the application:
+    1. Run the .bat file in the project directory : ParserUtil\out\artifacts\ParserUtil_jar
+    2. From command line navigate to above directory and run: java -jar ParserUtil.jar
+    
+    
