@@ -1,13 +1,12 @@
 package com.mattg;
 
-import com.mattg.GuiStrings;
+
 import org.json.JSONObject;
 import org.json.XML;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +18,6 @@ import java.util.Scanner;
 public class ParserApp {
     Scanner in;
     String command;
-    int numberCommand;
     private  FileReader reader;
     //boolean flags to control the flow of application when branching
     private boolean isXml = false;
