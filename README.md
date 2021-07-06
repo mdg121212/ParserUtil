@@ -4,7 +4,7 @@ A Java command line utility to parse XML to JSON, or vice versa. Options include
 
 The basic commands that can be run once the program is running:
 
-    1.commands - will show an available commands
+    1.commands - will show all available commands
     2.createfile - toggles whether or not new files will be created (default on)
     3.showresult - toggles whether or not results will print to console (default on)
     4.copy - toggles whether or not results are copied to clipboard (default on)
